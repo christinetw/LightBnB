@@ -13,7 +13,7 @@ CREATE TABLE properties(
   thumbnail_photo_url VARCHAR(255),
   cover_photo_url VARCHAR(255),
   cost_per_night INT,
-  parking_space INT,
+  parking_spaces INT,
   number_of_bathrooms INT,
   number_of_bedrooms INT,
   country VARCHAR(255),
