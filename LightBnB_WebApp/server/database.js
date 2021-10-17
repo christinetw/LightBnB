@@ -88,7 +88,7 @@ exports.addUser = addUser;
  */
 const getAllReservations = function (guest_id, limit = 10) {
   return pool
-    .query(`SELECT * FROM reservations LIMIT $1`, [limit])
+    .query(`SELECT * FROM reservations WHERE guest_id=$1 LIMIT $2`, [guest_id, limit])
     .then((result) => {
       return (result.rows);
     })
@@ -125,6 +125,7 @@ exports.getAllProperties = getAllProperties;
  * @return {Promise<{}>} A promise to the property.
  */
 const addProperty = function (property) {
+
   const propertyId = Object.keys(properties).length + 1;
   property.id = propertyId;
   properties[propertyId] = property;
