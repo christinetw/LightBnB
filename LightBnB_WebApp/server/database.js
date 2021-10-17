@@ -18,11 +18,17 @@ const pool = new Pool({
  * @return {Promise<{}>} A promise to the user.
  */
 const getUserWithEmail = function (email) {
-  pool.query(`
+  return pool.query(`
     SELECT *
     FROM users
     WHERE email = $1
-  `, [email]).then(resp => resp.rows[0]);
+  `, [email])
+    .then((result) => {
+      return (result.rows[0]);
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
 };
 exports.getUserWithEmail = getUserWithEmail;
 
@@ -33,13 +39,20 @@ exports.getUserWithEmail = getUserWithEmail;
  * @return {Promise<{}>} A promise to the user.
  */
 const getUserWithId = function (id) {
-  pool.query(`
+  return pool.query(`
   SELECT *
   FROM users
   WHERE id = $1
-`, [id]).then(resp => resp.rows[0]);
+`, [id])
+    .then((result) => {
+      return (result.rows[0]);
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
 };
 exports.getUserWithId = getUserWithId;
+
 /**
  * Add a new user to the database.
  * @param {{name: string, password: string, email: string}} user
@@ -47,11 +60,18 @@ exports.getUserWithId = getUserWithId;
  */
 const addUser = function (user) {
 
-  pool.query(`
+  return pool.query(`
     INSERT INTO users (name, email, password)
     VALUES ($1, $2, $3)
     RETURNING *;
-  `, [user.name, user.email, user.password]).then(resp => resp.rows[0]);
+  `, [user.name, user.email, user.password])
+    .then((result) => {
+      return (result.rows[0]);
+    })
+    .catch((err) => {
+      console.log("addUser error = " + err.message);
+    });
+
 };
 exports.addUser = addUser;
 
@@ -67,13 +87,10 @@ exports.addUser = addUser;
  * @return {Promise<[{}]>} A promise to the reservations.
  */
 const getAllReservations = function (guest_id, limit = 10) {
-  /*return getAllProperties(null, 2);
-}
-*/
-  pool
+  return pool
     .query(`SELECT * FROM reservations LIMIT $1`, [limit])
     .then((result) => {
-      console.log(result.rows);
+      return (result.rows);
     })
     .catch((err) => {
       console.log(err.message);
@@ -89,28 +106,17 @@ exports.getAllReservations = getAllReservations;
  * @param {*} limit The number of results to return.
  * @return {Promise<[{}]>}  A promise to the properties.
  */
-/*const getAllProperties = function(options, limit = 10) {
-const limitedProperties = {};
- 
- for (let i = 1; i <= limit; i++) {
-   limitedProperties[i] = properties[i];
- }
- return Promise.resolve(limitedProperties);
-}
-*/
-
-
 const getAllProperties = (options, limit = 10) => {
-  pool
+  return pool
     .query(`SELECT * FROM properties LIMIT $1`, [limit])
     .then((result) => {
-      console.log(result.rows);
+      return (result.rows);
     })
     .catch((err) => {
       console.log(err.message);
-    });
-
+    })
 };
+
 exports.getAllProperties = getAllProperties;
 
 /**
